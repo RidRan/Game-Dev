@@ -1,0 +1,13 @@
+Hi!
+Thanks for downloading the sorce code for my Pong game.
+
+You can just compile the win32_platform.c file however you want (it includes the other files).
+If you want to build it with the flags I used, you can run the build.bat from a terminal initialized for the Visual Studio compiler (the cl command).
+
+You can do whatever you want with the code, but I am providing it as is without any warranty whatsoever.
+
+I hope you enjoy it.
+If you happen to do something cool with it (even just learning) I'd love to know about it!
+
+-Dan Zaidan
+16 Sep 2018

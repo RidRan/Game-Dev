@@ -1,12 +1,54 @@
 #include <windows.h>
+#include <stdio.h>
+#include <time.h>
 
 const char g_szClassName[] = "myWindowClass";
 
 // Step 4: the Window Procedure
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    HDC hdc;                 // device context (DC) for window  
+    RECT rcTmp;              // temporary rectangle  
+    PAINTSTRUCT ps;          // paint data for BeginPaint and EndPaint  
+    POINT ptClientUL;        // client area upper left corner  
+    POINT ptClientLR;        // client area lower right corner  
+    static HDC hdcCompat;    // DC for copying bitmap  
+    POINT pt;
+    LPPOINT lppt;         // x and y coordinates of cursor  
+    static RECT rcBmp;       // rectangle that encloses bitmap  
+    static RECT rcTarget;    // rectangle to receive bitmap  
+    static RECT rcClient;    // client-area rectangle  
+    static BOOL fDragRect;   // TRUE if bitmap rect. is dragged  
+    static HBRUSH hbrBkgnd;  // handle of background-color brush  
+    static COLORREF crBkgnd; // color of client-area background  
+    static HPEN hpenDot;     // handle of dotted pen
+
+    COLORREF color=RGB(255,0,0);
+
+    char mouseHeld = 0;
+
     switch(msg)
     {
+        case WM_LBUTTONDOWN:
+        {
+            mouseHeld = 1;
+            // GetCursorPos(&pt);
+            // 
+            // hdc = GetDC(hwnd);
+            // SetPixel(hdc, pt.x, pt.y, color);
+        break;
+        }
+        case WM_LBUTTONUP:
+        {
+            mouseHeld = 0;
+        break;
+        }
+        case WM_PAINT:
+                GetCursorPos(&pt);
+                hdc = GetDC(hwnd);
+                // printf("Cursor position: %d,%d\n", pt.x, pt.y);
+                SetPixel(hdc, pt.x, pt.y, color);
+        break;
         case WM_CLOSE:
             DestroyWindow(hwnd);
         break;
@@ -51,7 +93,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     hwnd = CreateWindowEx(
         WS_EX_CLIENTEDGE,
         g_szClassName,
-        "Test",
+        "Window Test",
         WS_OVERLAPPEDWINDOW,         //w   h
         CW_USEDEFAULT, CW_USEDEFAULT, 1280, 700,
         NULL, NULL, hInstance, NULL);
