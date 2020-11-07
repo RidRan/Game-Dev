@@ -2,8 +2,11 @@ CC = gcc
 
 INCLUDE = -lgdi32
 
-window: window.c
-	$(CC) window.c -o window  $(INCLUDE)
+window: windowRunner.c windowRunnerUtils.o
+	$(CC) windowRunnerUtils.o windowRunner.c -o window  $(INCLUDE)
+
+windowRunnerUtils.o: windowRunnerUtils.c windowRunnerUtils.h
+	$(CC) -c windowRunnerUtils.c  $(INCLUDE)
 
 clean: 
 	rm -f *.o *~ *.out *.exe

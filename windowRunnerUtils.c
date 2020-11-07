@@ -1,72 +1,8 @@
 #include <windows.h>
-#include <stdio.h>
 
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-
-void AddMenus(HWND);
-
-void gradientDraw(HWND);
+#include "windowRunnerUtils.h"
 
 HMENU hMenu;
-
-int WINAPI WinMain(HINSTANCE inst,
-                     HINSTANCE prevInst,
-                     LPSTR cmdLine,
-                     int cmdShow) {
-                         
-    MessageBox(NULL, "This application is still in very early stages of development.", "Disclaimer", MB_OK);
-    
-    WNDCLASSEX wc;
-    HWND wnd;
-    MSG msg;
-
-    const char *className = "RatGameWindowClass";
-
-    wc.cbClsExtra     = 0;
-    wc.cbSize         = sizeof(WNDCLASSEX);
-    wc.cbWndExtra     = 0;
-
-    wc.hInstance      = inst;
-    wc.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hIconSm        = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hCursor        = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground  = (HBRUSH)(COLOR_WINDOW);
-
-    wc.lpfnWndProc    = WndProc;
-    wc.lpszMenuName   = NULL;
-    wc.lpszClassName  = className;
-
-    wc.style          = CS_DBLCLKS;
-
-    if(!RegisterClassEx(&wc))
-    {
-        MessageBox(NULL, "Window Registration Failed!", "Error!",
-            MB_ICONEXCLAMATION | MB_OK);
-        return 0;
-    }
-
-    wnd = CreateWindowEx(
-        WS_EX_CLIENTEDGE,
-        className,
-        "Window Test",
-        WS_OVERLAPPEDWINDOW | WS_VISIBLE,         //w   h
-        100, 100, 1280, 700,
-        NULL, NULL, inst, NULL);
-
-    if(wnd == NULL)
-    {
-        MessageBox(NULL, "Window Creation Failed!", "Error!",
-            MB_ICONEXCLAMATION | MB_OK);
-        return 0;
-    }
-
-    while(GetMessage(&msg, NULL, 0, 0) > 0)
-    {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
-    return msg.wParam;
-}
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch(msg) {
@@ -103,10 +39,9 @@ void AddMenus(HWND hwnd) {
 }
 
 void gradientDraw(HWND hwnd) {
-    RECT size;
-    GetWindowRect(hwnd, &size);
-    int width = size.right - size.left;
-    int height = size.bottom - size.top;
+    int width = getWidth(hwnd);
+    int height = getHeight(hwnd);
+    
     COLORREF color = 0x00000000;
 
     COLORREF *arr = (COLORREF*) calloc(width*height, sizeof(COLORREF));
@@ -141,4 +76,16 @@ void gradientDraw(HWND hwnd) {
     DeleteDC(src); // Deleting temp HDC
     DeleteDC(hdc);
     free(arr);
+}
+
+int getWidth(HWND hwnd) {
+    RECT size;
+    GetWindowRect(hwnd, &size);
+    return size.right - size.left;
+}
+
+int getHeight(HWND hwnd) {
+    RECT size;
+    GetWindowRect(hwnd, &size);
+    return size.bottom - size.top;;
 }
