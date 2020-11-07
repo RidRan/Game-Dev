@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "windowRunnerUtils.h"
+#include "imageUtils.h"
 
 int WINAPI WinMain(HINSTANCE inst,
                      HINSTANCE prevInst,

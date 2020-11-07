@@ -1,4 +1,4 @@
-CC = gcc
+CC = gcc -Wall
 
 INCLUDE = -lgdi32
 

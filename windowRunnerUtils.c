@@ -13,7 +13,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             switch(wParam) {
                 case 1:
                     MessageBeep(MB_OK);
-                    gradientDraw(hwnd);
                     break;
                 default:
                     break;
@@ -38,34 +37,14 @@ void AddMenus(HWND hwnd) {
     SetMenu(hwnd, hMenu);
 }
 
-
-
 void drawBitmap(HWND hwnd, HBITMAP map) {
-
-    // Creating temp bitmap
-    HBITMAP map = CreateBitmap(width, // width. 512 in my case
-                            height, // height
-                            1, // Color Planes, unfortanutelly don't know what is it actually. Let it be 1
-                            8*4, // Size of memory for one pixel in bits (in win32 4 bytes = 4*8 bits)
-                            (void*) arr); // pointer to array
-    // Temp HDC to copy picture
     HDC hdc = GetDC(hwnd);
-    HDC src = CreateCompatibleDC(hdc); // hdc - Device context for window, I've got earlier with GetDC(hWnd) or GetDC(NULL);
-    SelectObject(src, map); // Inserting picture into our temp HDC
-    // Copy image from temp HDC to window
-    BitBlt(hdc, // Destination
-        0,  // x and
-        0,  // y - upper-left corner of place, where we'd like to copy
-        width, // width of the region
-        height, // height
-        src, // source
-        0,   // x and
-        0,   // y of upper left corner  of part of the source, from where we'd like to copy
-        SRCCOPY); // Defined DWORD to juct copy pixels. Watch more on msdn;
+    HDC src = CreateCompatibleDC(hdc);
+    SelectObject(src, map);
 
-    DeleteDC(src); // Deleting temp HDC
+    BitBlt(hdc, 0,  0, getWidth(hwnd), getHeight(hwnd), src, 0, 0, SRCCOPY);
+    DeleteDC(src);
     DeleteDC(hdc);
-    free(arr);
 }
 
 int getWidth(HWND hwnd) {
