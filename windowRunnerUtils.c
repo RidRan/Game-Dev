@@ -38,19 +38,9 @@ void AddMenus(HWND hwnd) {
     SetMenu(hwnd, hMenu);
 }
 
-void gradientDraw(HWND hwnd) {
-    int width = getWidth(hwnd);
-    int height = getHeight(hwnd);
-    
-    COLORREF color = 0x00000000;
 
-    COLORREF *arr = (COLORREF*) calloc(width*height, sizeof(COLORREF));
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            arr[i*width + j] = color;
-            color++;
-        }
-    }
+
+void drawBitmap(HWND hwnd, HBITMAP map) {
 
     // Creating temp bitmap
     HBITMAP map = CreateBitmap(width, // width. 512 in my case

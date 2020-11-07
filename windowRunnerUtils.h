@@ -4,7 +4,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 void AddMenus(HWND);
 
-void gradientDraw(HWND);
+void drawBitmap(HWND, HBITMAP);
 
 int getWidth(HWND);
 
