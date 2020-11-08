@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "windowRunnerUtils.h"
+#include "imageUtils.h"
 
 HMENU hMenu;
 
@@ -13,6 +14,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             switch(wParam) {
                 case 1:
                     MessageBeep(MB_OK);
+                    int width, height;
+                    drawBitmap(hwnd, imageToBitmap(loadImageFromBMP("avery.bmp", &width, &height), width, height));
+
                     break;
                 default:
                     break;

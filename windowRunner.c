@@ -1,12 +1,8 @@
 #include <windows.h>
 
 #include "windowRunnerUtils.h"
-#include "imageUtils.h"
 
-int WINAPI WinMain(HINSTANCE inst,
-                     HINSTANCE prevInst,
-                     LPSTR cmdLine,
-                     int cmdShow) {
+int WINAPI WinMain(HINSTANCE inst, HINSTANCE prevInst, LPSTR cmdLine, int cmdShow) {
                          
     MessageBox(NULL, "This application is still in very early stages of development.", "Disclaimer", MB_OK);
     
@@ -32,30 +28,20 @@ int WINAPI WinMain(HINSTANCE inst,
 
     wc.style          = CS_DBLCLKS;
 
-    if(!RegisterClassEx(&wc))
-    {
-        MessageBox(NULL, "Window Registration Failed!", "Error!",
-            MB_ICONEXCLAMATION | MB_OK);
+    if(!RegisterClassEx(&wc)) {
+        MessageBox(NULL, "Window Registration Failed!", "Error!", MB_ICONEXCLAMATION | MB_OK);
         return 0;
     }
 
-    wnd = CreateWindowEx(
-        WS_EX_CLIENTEDGE,
-        className,
-        "Window Test",
-        WS_OVERLAPPEDWINDOW | WS_VISIBLE,         //w   h
-        100, 100, 1280, 700,
-        NULL, NULL, inst, NULL);
+    wnd = CreateWindowEx(WS_EX_CLIENTEDGE, className, "Window Test", WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                         100, 100, 1280, 700, NULL, NULL, inst, NULL);
 
-    if(wnd == NULL)
-    {
-        MessageBox(NULL, "Window Creation Failed!", "Error!",
-            MB_ICONEXCLAMATION | MB_OK);
+    if(wnd == NULL) {
+        MessageBox(NULL, "Window Creation Failed!", "Error!", MB_ICONEXCLAMATION | MB_OK);
         return 0;
     }
 
-    while(GetMessage(&msg, NULL, 0, 0) > 0)
-    {
+    while(GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
