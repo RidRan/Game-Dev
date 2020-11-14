@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 
 #include "windowRunnerUtils.h"
 #include "imageUtils.h"
@@ -13,11 +14,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case WM_COMMAND:
             switch(wParam) {
                 case 1:
+                    {
                     MessageBeep(MB_OK);
-                    int width, height;
-                    drawBitmap(hwnd, imageToBitmap(loadImageFromBMP("avery.bmp", &width, &height), width, height));
-
+                    byte *image = NULL;
+                    int width, height, bytesPerPixel;
+                    loadImageFromBMP("avery.bmp",&image, &width, &height, &bytesPerPixel);
+                    WriteImage("test.bmp", image, width, height, bytesPerPixel);
+                    drawBitmap(hwnd, (HBITMAP) LoadImageW(NULL, L"avery.bmp", IMAGE_BITMAP, width, height, LR_LOADFROMFILE));
+                    // drawBitmap(hwnd, CreateBitmap(width, height, 1, bytesPerPixel*4, image));
                     break;
+                    }
                 default:
                     break;
             }
@@ -42,6 +48,10 @@ void AddMenus(HWND hwnd) {
 }
 
 void drawBitmap(HWND hwnd, HBITMAP map) {
+    if (map == NULL) {
+        fprintf(stderr, "NULL HBITMAP received!\n");
+    }
+
     HDC hdc = GetDC(hwnd);
     HDC src = CreateCompatibleDC(hdc);
     SelectObject(src, map);
