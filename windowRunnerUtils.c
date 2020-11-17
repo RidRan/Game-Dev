@@ -19,9 +19,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                     byte *image = NULL;
                     int width, height, bytesPerPixel;
                     loadImageFromBMP("avery.bmp",&image, &width, &height, &bytesPerPixel);
-                    WriteImage("test.bmp", image, width, height, bytesPerPixel);
-                    drawBitmap(hwnd, (HBITMAP) LoadImageW(NULL, L"avery.bmp", IMAGE_BITMAP, width, height, LR_LOADFROMFILE));
-                    // drawBitmap(hwnd, CreateBitmap(width, height, 1, bytesPerPixel*4, image));
+                    // WriteImage("screen.bmp", image, width, height, bytesPerPixel);
+                    //drawBitmap(hwnd, (HBITMAP) LoadImageW(NULL, L"screen.bmp", IMAGE_BITMAP, width, height, LR_LOADFROMFILE));
+                    // drawBitmap(hwnd, CreateBitmap(width, height, 1, 8*bytesPerPixel, image));
+                    drawBitmap(hwnd, CreateBitmap(width, height, 1, 8*4, (void *) byteToCOLORREF(image, width, height, bytesPerPixel)));
+                    // drawBitmap(hwnd, CreateBitmap(width, height, 1, 8*4, (void *) getBlackCOLORREF(width, height)));
                     break;
                     }
                 default:
@@ -59,6 +61,9 @@ void drawBitmap(HWND hwnd, HBITMAP map) {
     BitBlt(hdc, 0,  0, getWidth(hwnd), getHeight(hwnd), src, 0, 0, SRCCOPY);
     DeleteDC(src);
     DeleteDC(hdc);
+}
+
+void drawImage(HWND hwnd, byte *image, int width, int height, int bytesPerPixel) {
 }
 
 int getWidth(HWND hwnd) {

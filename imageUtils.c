@@ -106,6 +106,32 @@ void WriteImage(const char *fileName, byte *pixels, int width, int height,int by
         fclose(outputFile);
 }
 
-HBITMAP imageToBitmap(byte *image, int width, int height, int bytesPerPixel) {
-    return CreateBitmap(width, height, 1, bytesPerPixel*4, image);
+HBITMAP imageToBitmap(HWND hwnd, COLORREF *image, int width, int height, int bytesPerPixel) {
+
+    return CreateBitmap(width, height, 1, bytesPerPixel*4, (void *) image);
+}
+
+COLORREF *byteToCOLORREF(byte *image, int width, int height, int bytesPerPixel) {
+    COLORREF *pixels = (COLORREF *) calloc(height * width, sizeof(COLORREF));
+
+    int j = 0;
+    if (bytesPerPixel == 3) {
+        for (int i = 0; i < height * width * bytesPerPixel - 2; i += 3) {
+            pixels[j] = ((COLORREF) image[i+2] << 16) | ((COLORREF) image[i+1] << 8) | ((COLORREF) image[i]);
+            j++;
+        }
+    } else {
+        printf("Byte array does not specify 3 bytes per pixel\n");
+    }
+    return pixels;
+}
+
+COLORREF *getBlackCOLORREF(int width, int height) {
+    COLORREF *pixels = (COLORREF *) calloc(width*height, sizeof(COLORREF *));
+
+    for (int i = 0; i < width*height; i++) {
+        pixels[i] = 0x00000000;
+    }
+
+    return pixels;
 }
