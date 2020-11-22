@@ -108,7 +108,7 @@ void WriteImage(const char *fileName, byte *pixels, int width, int height,int by
 
 HBITMAP imageToBitmap(HWND hwnd, COLORREF *image, int width, int height, int bytesPerPixel) {
 
-    return CreateBitmap(width, height, 1, bytesPerPixel*4, (void *) image);
+    return CreateBitmap(width, height, 1, 8*4, (void *) image);
 }
 
 COLORREF *byteToCOLORREF(byte *image, int width, int height, int bytesPerPixel) {

@@ -19,7 +19,7 @@ void loadImageFromBMP(char *, byte **, int *, int *, int *);
 
 void WriteImage(const char *, byte *, int, int,int);
 
-HBITMAP imageToBitmap(HWND, byte *, int, int, int);
+HBITMAP imageToBitmap(HWND, COLORREF *, int, int, int);
 
 COLORREF *byteToCOLORREF(byte *, int, int, int);
 

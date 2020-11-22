@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <time.h>
 #include <stdio.h>
 
 #include "windowRunnerUtils.h"
@@ -6,7 +7,10 @@
 
 HMENU hMenu;
 
+int fps = 60;
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    int fps_time = time(NULL);
     switch(msg) {
         case WM_PAINT:
             
@@ -15,15 +19,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
             switch(wParam) {
                 case 1:
                     {
-                    MessageBeep(MB_OK);
                     byte *image = NULL;
                     int width, height, bytesPerPixel;
                     loadImageFromBMP("avery.bmp",&image, &width, &height, &bytesPerPixel);
-                    // WriteImage("screen.bmp", image, width, height, bytesPerPixel);
-                    //drawBitmap(hwnd, (HBITMAP) LoadImageW(NULL, L"screen.bmp", IMAGE_BITMAP, width, height, LR_LOADFROMFILE));
-                    // drawBitmap(hwnd, CreateBitmap(width, height, 1, 8*bytesPerPixel, image));
                     drawBitmap(hwnd, CreateBitmap(width, height, 1, 8*4, (void *) byteToCOLORREF(image, width, height, bytesPerPixel)));
-                    // drawBitmap(hwnd, CreateBitmap(width, height, 1, 8*4, (void *) getBlackCOLORREF(width, height)));
+                    printf("%d\n", fps_time);
+                    break;
+                    }
+                case 2:
+                    {
+                    byte *image = NULL;
+                    int width, height, bytesPerPixel;
+                    loadImageFromBMP("avery.bmp",&image, &width, &height, &bytesPerPixel);
+                    drawFitBitmap(hwnd, CreateBitmap(width, height, 1, 8*4, (void *) byteToCOLORREF(image, width, height, bytesPerPixel)), width, height);
                     break;
                     }
                 default:
@@ -44,7 +52,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 void AddMenus(HWND hwnd) {
     hMenu = CreateMenu();
 
-    AppendMenu(hMenu, MF_STRING, 1, "Draw Gradient");
+    AppendMenu(hMenu, MF_STRING, 1, "Draw Avery");
+
+    AppendMenu(hMenu, MF_STRING, 2, "Draw Avery (Fit)");
 
     SetMenu(hwnd, hMenu);
 }
@@ -59,6 +69,20 @@ void drawBitmap(HWND hwnd, HBITMAP map) {
     SelectObject(src, map);
 
     BitBlt(hdc, 0,  0, getWidth(hwnd), getHeight(hwnd), src, 0, 0, SRCCOPY);
+    DeleteDC(src);
+    DeleteDC(hdc);
+}
+
+void drawFitBitmap(HWND hwnd, HBITMAP map, int width, int height) {
+    if (map == NULL) {
+        fprintf(stderr, "NULL HBITMAP received!\n");
+    }
+
+    HDC hdc = GetDC(hwnd);
+    HDC src = CreateCompatibleDC(hdc);
+    SelectObject(src, map);
+    SetStretchBltMode(hdc, HALFTONE);
+    StretchBlt(hdc, 0,  0, getWidth(hwnd), getHeight(hwnd), src, 0, 0, width, height, SRCCOPY);
     DeleteDC(src);
     DeleteDC(hdc);
 }
