@@ -11,6 +11,8 @@ public class RobotController : MonoBehaviour {
     float timer;
     int direction = 1;
 
+    bool broken = true;
+
     Animator animator;
 
     // Start is called before the first frame update
@@ -21,6 +23,10 @@ public class RobotController : MonoBehaviour {
     }
 
     private void Update() {
+        if(!broken) {
+            return;
+        }
+
         timer -= Time.deltaTime;
 
         if (timer < 0) {
@@ -30,6 +36,10 @@ public class RobotController : MonoBehaviour {
     }
 
     void FixedUpdate() {
+        if(!broken) {
+            return;
+        }
+
         Vector2 position = rigidbody2D.position;
 
         if (vertical) {
@@ -51,5 +61,11 @@ public class RobotController : MonoBehaviour {
         if (player != null) {
             player.ChangeHealth(-1);
         }
+    }
+
+    public void Fix() {
+        broken = false;
+        rigidbody2D.simulated = false;
+        animator.SetTrigger("Fixed");
     }
 }

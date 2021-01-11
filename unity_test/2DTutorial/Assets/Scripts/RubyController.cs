@@ -5,7 +5,7 @@ using UnityEngine;
 public class RubyController : MonoBehaviour {
     public int maxHealth = 5;
 
-    bool broken = true;
+
     int currentHealth;
     public int health {
         get {
@@ -40,8 +40,8 @@ public class RubyController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        if (!broken) {
-            return;
+        if(transform.position.magnitude > 1000.0f) {
+            Destroy(gameObject);
         }
 
         horizontal = Input.GetAxis("Horizontal");
@@ -73,9 +73,6 @@ public class RubyController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-         if (!broken) {
-            return;
-        }
 
         float frameTime = Time.deltaTime;
 
@@ -108,10 +105,5 @@ public class RubyController : MonoBehaviour {
         projectile.Launch(lookDirection, force);
 
         animator.SetTrigger("Launch");
-    }
-
-    public void Fix() {
-        broken = false;
-        rigidbody2d.simulated = false;
     }
 }
