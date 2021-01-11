@@ -9,7 +9,7 @@ HMENU hMenu;
 
 clock_t currentClock = 0;
 int frameCount = 0;
-int fps = 1;
+int fps = 30;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     if (clock() - currentClock >= CLOCKS_PER_SEC / fps) {
