@@ -7,6 +7,8 @@ public class RobotController : MonoBehaviour {
     public bool horizontal, vertical;
     public float changeTime = 3.0f;
 
+    public ParticleSystem smoke;
+
     Rigidbody2D rigidbody2D;
     float timer;
     int direction = 1;
@@ -67,5 +69,6 @@ public class RobotController : MonoBehaviour {
         broken = false;
         rigidbody2D.simulated = false;
         animator.SetTrigger("Fixed");
+        smoke.Stop();
     }
 }
